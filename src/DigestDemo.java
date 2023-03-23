@@ -1,3 +1,5 @@
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
@@ -24,7 +26,6 @@ public class DigestDemo
 
     public static void main(String[] args) throws Exception
     {
-        //TODO: BouncyCastleProvider
         Security.addProvider(new BouncyCastleProvider());
         System.out.println(byteArrayToHex(computeDigest("SHA-256", "Hello World!".getBytes())));
     }
