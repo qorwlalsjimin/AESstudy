@@ -8,6 +8,12 @@ import java.security.Security;
 //참고 https://stackoverflow.com/questions/64679961/how-to-use-bouncycastle-with-java
 public class DigestDemo
 {
+    public static void main(String[] args) throws Exception
+    {
+        Security.addProvider(new BouncyCastleProvider());
+        System.out.println(byteArrayToHex(computeDigest("SHA-256", "Hello World!".getBytes())));
+    }
+
     public static String byteArrayToHex(byte[] a)
     {
         StringBuilder sb = new StringBuilder(a.length * 2);
@@ -22,11 +28,5 @@ public class DigestDemo
         MessageDigest digest = MessageDigest.getInstance(digestName, "BC");
         digest.update(data);
         return digest.digest();
-    }
-
-    public static void main(String[] args) throws Exception
-    {
-        Security.addProvider(new BouncyCastleProvider());
-        System.out.println(byteArrayToHex(computeDigest("SHA-256", "Hello World!".getBytes())));
     }
 }
