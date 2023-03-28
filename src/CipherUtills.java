@@ -9,53 +9,56 @@ import org.bouncycastle.util.encoders.Base64;
 
 class CipherUtils {
 
-    private static final String CIPHER_PROVIDER = "BC";
+    private static final String CIPHER_PROVIDER = "BC"; //TODO: chipher, BC
 
-    private Cipher encrypter;
+    private Cipher encrypter; //TODO:javax.crypto.Cipher
     private Cipher decrypter;
 
-    public CipherUtils(String keyAlgorithm, String cipherAlgorithm,
-                       String keyString) {
+    //생성자
+    public CipherUtils(String keyAlgorithm, String cipherAlgorithm, String keyString) { //TODO: 매개변수 각각의 의미
         if (Security.getProvider(CIPHER_PROVIDER) == null) {
             Security.addProvider(new BouncyCastleProvider());
         }
 
-        byte[] key = keyString.getBytes();
+        byte[] key = keyString.getBytes(); //key를 바이트로 변환
 
-        SecretKeySpec sks = new SecretKeySpec(key, keyAlgorithm);
+        //java.security 패키지의 클래스
+        SecretKeySpec sks = new SecretKeySpec(key, keyAlgorithm); //TODO: SecretKeySpec
 
         try {
             encrypter = Cipher.getInstance(cipherAlgorithm, CIPHER_PROVIDER);
-            encrypter.init(Cipher.ENCRYPT_MODE, sks);
+            encrypter.init(Cipher.ENCRYPT_MODE, sks); //암호화 모드
 
             decrypter = Cipher.getInstance(cipherAlgorithm, CIPHER_PROVIDER);
-            decrypter.init(Cipher.DECRYPT_MODE, sks);
+            decrypter.init(Cipher.DECRYPT_MODE, sks); //복호화 모드
         } catch (Exception e) {
             System.err.println("Caught an exception:" + e);
-            throw new AssertionError(e);
+            throw new AssertionError(e); //TODO: AssertionError
         }
     }
 
-    public String encrypt(String data) throws Exception {
-        if (data == null) {
+    //암호화 메서드
+    public String encrypt(String data) throws Exception { //매개변수: 평문 데이터
+        if (data == null) { //data NULL 체크
             return null;
         }
 
-        byte[] encryptedData;
+        byte[] encryptedData; //byte배열 안에 암호화한 데이터 대입
         try {
-            encryptedData = encrypter.doFinal(data.getBytes());
+            encryptedData = encrypter.doFinal(data.getBytes()); //TODO:
         } catch (Exception e) {
             throw new Exception(e);
         }
-        return new String(Base64.encode(encryptedData));
+        return new String(Base64.encode(encryptedData)); //우리가 읽을 수 있는 문자로 변환(의미는 모름)
     }
 
-    public String decrypt(String encryptedData) throws Exception {
-        if (encryptedData == null) {
+    //복호화 메서드
+    public String decrypt(String encryptedData) throws Exception { //매개변수: 암호화된 데이터
+        if (encryptedData == null) { //data NULL 체크
             return null;
         }
 
-        byte[] decryptedData = Base64.decode(encryptedData);
+        byte[] decryptedData = Base64.decode(encryptedData); //TODO: Bouncycastle의 Base64
         try {
             return new String(decrypter.doFinal(decryptedData));
         } catch (Exception e) {
@@ -67,27 +70,25 @@ class CipherUtils {
 
 class AesExample {
 
-    private static final String KEY_ALGORITHM = "AES";
-    private static final String CIPHER_ALGORITHM = "AES/ECB/ZeroBytePadding";
-    private static final String KEY_STRING = "abcdefgh01234567";
+    private static final String KEY_ALGORITHM = "AES"; //알고리즘 설정
+    private static final String CIPHER_ALGORITHM = "AES/ECB/ZeroBytePadding"; //TODO
+    private static final String KEY_STRING = "abcdefgh01234567"; //암호화할 키
 
     public static void main(String[] args) {
         System.out.println("Key: " + KEY_STRING);
 
-        CipherUtils cu = new CipherUtils(KEY_ALGORITHM, CIPHER_ALGORITHM,
-                KEY_STRING);
+        CipherUtils cu = new CipherUtils(KEY_ALGORITHM, CIPHER_ALGORITHM, KEY_STRING);
 
         String data = "This is just an example";
         System.out.println("Data: " + data);
 
         try {
-            String encryptedHex = cu.encrypt(data);
+            String encryptedHex = cu.encrypt(data); //CipherUtils 클래스의 enrypt() 메서드로 암호화
             System.out.println("Encrypted Hex: " + encryptedHex);
 
-            String decryptedData = cu.decrypt(encryptedHex);
+            String decryptedData = cu.decrypt(encryptedHex); //CipherUtils 클래스의 decrypt() 메서드로 복호화
             System.out.println("Decrypted Data: " + decryptedData);
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
