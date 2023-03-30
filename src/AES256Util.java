@@ -9,6 +9,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 
 //양방향 암호화 알고리즘인 AES256 암호화를 지원하는 클래스
 public class AES256Util {
@@ -40,16 +41,8 @@ public class AES256Util {
         if (len > keyBytes.length) len = keyBytes.length; //키값 16으로 유지하기 위함
         System.arraycopy( b, 0, keyBytes, 0,   len ); //keyBytes에 b 내용 복사
 
-        SecretKeySpec keySpec = new SecretKeySpec(keyBytes, "AES"); //비밀키 지정 (키값, 암호화 알고리즘 이름)
-
-//        System.out.println("keySpec: "+keySpec); //keySpec: javax.crypto.spec.SecretKeySpec@1568f
+        SecretKeySpec keySpec = new SecretKeySpec(keyBytes, "AES"); //비밀키 지정 (키값, 암호화 알고리즘 이름) AESkey
         //TODO: key와 keySpec의 차이점 - https://stackoverflow.com/questions/35729629/whats-the-difference-between-a-key-and-a-keyspec
-        /*
-        * SecretKeySpec 클래스
-        *   이 클래스는 공급자 독립적 방식으로 비밀 키를 지정합니다.
-        *   SecretKeyFactory를 거치지 않고 바이트 배열에서 SecretKey를 구성하는 데 사용할 수 있습니다.
-        *   이 클래스는 바이트 배열로 표시될 수 있고 이와 관련된 키 매개변수(예: DES 또는 Triple DES 키)가 없는 원시 비밀 키에만 유용합니다.
-        */
 
         this.keySpec = keySpec;
     }
