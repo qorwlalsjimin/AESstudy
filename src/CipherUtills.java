@@ -1,11 +1,11 @@
 //참고 https://devday.tistory.com/entry/%EC%9E%90%EB%B0%94%EC%97%90%EC%84%9C-bouncycastle%EC%9D%84-%ED%99%9C%EC%9A%A9%ED%95%98%EC%97%AC-AES-%EC%95%94%EB%B3%B5%ED%98%B8%ED%99%94%ED%95%98%EA%B8%B0
-import java.security.Security;
-
-import javax.crypto.Cipher;
-import javax.crypto.spec.SecretKeySpec;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.util.encoders.Base64;
+
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+import java.security.Security;
 
 class CipherUtils {
 
@@ -79,7 +79,7 @@ class AesExample {
 
         CipherUtils cu = new CipherUtils(KEY_ALGORITHM, CIPHER_ALGORITHM, KEY_STRING);
 
-        String data = "This is just an example";
+        String data = "010-1111-2222";
         System.out.println("Data: " + data);
 
         try {
