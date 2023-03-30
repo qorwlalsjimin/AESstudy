@@ -55,8 +55,8 @@ public class AES256Util {
 
     /** AES256 으로 암호화
      * 1. 암&복호화를 수행해주는 Cipher 객체 생성
-     * 2. init 메서드로 Cipher 객체 초기화
-     * 3. doFinal 메서드로 AES 암호화 수행 => 결과: byte형
+     * 2. init() 메서드로 Cipher 객체 초기화 - 암호화모드, 키값, IV
+     * 3. doFinal() 메서드로 AES 암호화 수행 => 결과: byte형
      * 4. Base64 인코딩하여 암호문을 문자열로 변환 => 결과: String형
      * */
     public String encrypt(String str) throws NoSuchAlgorithmException,
@@ -70,13 +70,19 @@ public class AES256Util {
         return enStr;
     }
 
-    /** AES256으로 암호화된 txt를 복호화 */
+    /** AES256으로 암호화된 txt를 복호화
+     * 1. 암&복호화를 수행해주는 Cipher 객체 생성
+     * 2. init 메서드로 Cipher 객체 초기화 - 암호화모드, 키값, IV
+     * 3. Base64 디코딩 => 결과: byte형
+     * 4. doFinal() 메서드로 AES 복호화 & String 생성 => 결과: String형
+     * */
     public String decrypt(String str) throws NoSuchAlgorithmException,
             GeneralSecurityException, UnsupportedEncodingException {
-        Cipher c = Cipher.getInstance("AES/CBC/PKCS5Padding");
-        c.init(Cipher.DECRYPT_MODE, keySpec, new IvParameterSpec(iv.getBytes()));
-        byte[] byteStr = Base64.decode(str.getBytes());
-        return new String(c.doFinal(byteStr), "UTF-8");
+
+        Cipher c = Cipher.getInstance("AES/CBC/PKCS5Padding"); //객체 생성
+        c.init(Cipher.DECRYPT_MODE, keySpec, new IvParameterSpec(iv.getBytes())); //초기화
+        byte[] byteStr = Base64.decode(str.getBytes()); //암호문 => Base64 인코딩된 Byte 암호문 => Base64 디코딩 => AES로 복호화하면 풀릴 Byte 암호문
+        return new String(c.doFinal(byteStr), "UTF-8"); //AES로 복호화
     }
 }
 
