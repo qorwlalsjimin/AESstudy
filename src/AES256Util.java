@@ -31,7 +31,8 @@ public class AES256Util {
     final static String key = "abcdabcdabcdabcd"; //암호화 & 복호화 키
 
     public AES256Util() throws UnsupportedEncodingException {
-        this.iv = key.substring(0, 16); //키값 16자리로 유지 (16자리보다 많을 경우를 위함)
+        this.iv = "aaaabbbbccccdddd"; //키값 16자리로 유지 (16자리보다 많을 경우를 위함)
+//        this.iv = key.substring(0, 16); //키값 16자리로 유지 (16자리보다 많을 경우를 위함)
         byte[] keyBytes = new byte[16];
         byte[] b = key.getBytes("UTF-8"); //키값 문자마다 아스키코드로 바꾸기
         int len = b.length; //키값의 길이
