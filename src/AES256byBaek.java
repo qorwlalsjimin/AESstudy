@@ -1,9 +1,7 @@
 import org.bouncycastle.util.encoders.Base64;
+import org.bouncycastle.util.encoders.Hex;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
+import javax.crypto.*;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.UnsupportedEncodingException;
@@ -24,10 +22,15 @@ public class AES256byBaek {
      * 5. 비밀 키를 지정해주는 SecretKeySpec 객체를 생성한다
      * 6. keySpec 변수(Key 객체)에 5에서 SecretKeySpec 객체를 넣어준다
      * */
-    public AES256byBaek() throws UnsupportedEncodingException {
-        String key = "abcdabcdabcdabcd";
-        iv = key.substring(0, 16);
-        byte[] keyBytes = new byte[16];
+    public AES256byBaek() throws UnsupportedEncodingException, NoSuchAlgorithmException {
+        //1. 256비트 비밀키 생성
+        KeyGenerator kgen = KeyGenerator.getInstance("AES");
+        kgen.init(256); //256비트(32바이트)
+
+        String key = new String(Hex.encode(kgen.generateKey().getEncoded()));
+
+        iv = key.substring(0, 16); //16바이트
+        byte[] keyBytes = new byte[32];
         byte[] b = key.getBytes("UTF-8");
         int len = b.length;
 
