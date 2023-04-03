@@ -1,3 +1,5 @@
+//Github: https://github.com/qorwlalsjimin/AESstudy
+//Github Issues: https://github.com/qorwlalsjimin/AESstudy/issues?q=is%3Aissue+is%3Aclosed
 import org.bouncycastle.util.encoders.Base64;
 
 import javax.crypto.*;
@@ -16,7 +18,7 @@ public class AES256byBaek {
     /** 생성자 */
     public AES256byBaek() throws UnsupportedEncodingException, NoSuchAlgorithmException {
         //1. 256비트 비밀키 생성
-        KeyGenerator kgen = KeyGenerator.getInstance("AES");
+        KeyGenerator kgen = KeyGenerator.getInstance("AES"); //Key 만드는 KeyGenerator 객체 생성
         kgen.init(256); //256비트(32바이트) 키 지정
         byte[] keyBytes = kgen.generateKey().getEncoded(); //byte[]로 키 저장
 
@@ -25,7 +27,7 @@ public class AES256byBaek {
         new SecureRandom().nextBytes(iv);
 
         //3. keySpec 생성
-        keySpec = new SecretKeySpec(keyBytes, "AES");
+        keySpec = new SecretKeySpec(keyBytes, "AES"); //(key, 암호화 알고리즘)
     }
 
     /** 암호화 */
@@ -34,8 +36,11 @@ public class AES256byBaek {
             UnsupportedEncodingException, //str.getBytes()
             IllegalBlockSizeException, BadPaddingException /*doFinal()*/ {
 
-        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding"); //암호화를 수행해주는 Cipher 객체
+        //1. 암호화 수행하는 Cipher 객체 생성
+        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding"); //(암호화 알고리즘/블럭암호 모드/패딩 체계)
         cipher.init(Cipher.ENCRYPT_MODE, keySpec, new IvParameterSpec(iv)); //(암호화 모드, 키스펙, iv)로 초기화
+
+        //2. 암호화
         byte[] en_arr = cipher.doFinal(str.getBytes("UTF-8")); //암호화 수행
 
         return new String(Base64.encode(en_arr)); //AES 암호문(byte[])을 => Base64 인코딩(byte[])해주고 => 문자열로 변환
@@ -47,8 +52,11 @@ public class AES256byBaek {
             UnsupportedEncodingException,
             IllegalBlockSizeException, BadPaddingException {
 
-        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding"); //복호화를 수행해주는 Cipher 객체
+        //1. 복호화 수행하는 Cipher 객체 생성
+        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding"); //(암호화 알고리즘/블럭암호 모드/패딩 체계)
         cipher.init(Cipher.DECRYPT_MODE, keySpec, new IvParameterSpec(iv)); //(복호화 모드, 키스펙, iv)로 초기화
+
+        //2. 복호화
         byte[] b = Base64.decode(en_str.getBytes()); //Base64 디코딩
 
         return new String(cipher.doFinal(b), "UTF-8"); //복호화 수행 => 문자열로 변환
