@@ -9,12 +9,11 @@ import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 
 //양방향 암호화 알고리즘인 AES256 암호화를 지원하는 클래스
 public class AES256Util {
     private final String iv; //초기화 벡터
-    private Key keySpec; //TODO: 어디에 쓰이는지 모르겠다 the specification of key?
+    private Key keySpec; //AES에 맞는 key를 생성해준다
     /*
     * Key 클래스
     *   The Key interface is the top-level interface for all keys.
@@ -42,7 +41,6 @@ public class AES256Util {
         System.arraycopy( b, 0, keyBytes, 0,   len ); //keyBytes에 b 내용 복사
 
         SecretKeySpec keySpec = new SecretKeySpec(keyBytes, "AES"); //비밀키 지정 (키값, 암호화 알고리즘 이름) AESkey
-        //TODO: key와 keySpec의 차이점 - https://stackoverflow.com/questions/35729629/whats-the-difference-between-a-key-and-a-keyspec
 
         this.keySpec = keySpec;
     }
