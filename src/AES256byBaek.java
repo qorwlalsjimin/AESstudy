@@ -5,13 +5,10 @@ import javax.crypto.*;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.UnsupportedEncodingException;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.Key;
-import java.security.NoSuchAlgorithmException;
+import java.security.*;
 
 public class AES256byBaek {
-    String iv;
+    byte[] iv;
     Key keySpec;
 
     /** 16자리의 키값을 입력하여 객체를 생성
@@ -29,7 +26,8 @@ public class AES256byBaek {
 
         String key = new String(Hex.encode(kgen.generateKey().getEncoded()));
 
-        iv = key.substring(0, 16); //16바이트
+        iv = new byte[16];
+        new SecureRandom().nextBytes(iv);
         byte[] keyBytes = new byte[32];
         byte[] b = key.getBytes("UTF-8");
         int len = b.length;
@@ -44,14 +42,14 @@ public class AES256byBaek {
 
     public String encryption(String str) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, UnsupportedEncodingException {
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-        cipher.init(Cipher.ENCRYPT_MODE, keySpec, new IvParameterSpec(iv.getBytes()));
+        cipher.init(Cipher.ENCRYPT_MODE, keySpec, new IvParameterSpec(iv));
         byte[] en_arr = cipher.doFinal(str.getBytes("UTF-8"));
         return new String(Base64.encode(en_arr));
     }
 
     public String decryption(String en_str) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, UnsupportedEncodingException {
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-        cipher.init(Cipher.DECRYPT_MODE, keySpec, new IvParameterSpec(iv.getBytes()));
+        cipher.init(Cipher.DECRYPT_MODE, keySpec, new IvParameterSpec(iv));
         byte[] b = Base64.decode(en_str.getBytes());
         return new String(cipher.doFinal(b), "UTF-8");
     }
