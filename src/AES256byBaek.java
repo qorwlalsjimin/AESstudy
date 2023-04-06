@@ -1,5 +1,6 @@
 //Github: https://github.com/qorwlalsjimin/AESstudy
 //Github Issues: https://github.com/qorwlalsjimin/AESstudy/issues?q=is%3Aissue+is%3Aclosed
+
 import org.bouncycastle.util.encoders.Base64;
 
 import javax.crypto.*;
@@ -25,6 +26,8 @@ public class AES256byBaek {
         //2. iv 자동 생성
         iv = new byte[16];
         new SecureRandom().nextBytes(iv);
+        //key에서 16바이트를 복사해와서 사용하기도 함
+//        System.arraycopy(keyBytes, 0, iv, 0, 16);
 
         //3. keySpec 생성
         keySpec = new SecretKeySpec(keyBytes, "AES"); //(key, 암호화 알고리즘)
